@@ -1,0 +1,14 @@
+An API (Application Programming Interface) defines how different software components communicate.
+In the context of a **RESTful API**, it typically consists of endpoints (URLs) 
+that clients (like a frontend or mobile app) can request data from or send data to.
+
+### Example of a Simple API (Express.js)
+If you create a REST API using Express.js, it might look like this:
+
+### How This API Works
+- **GET `/api/users`** → Fetches all users.
+- **GET `/api/users/:id`** → Fetches a specific user by ID.
+- **POST `/api/users`** → Creates a new user.
+- **PUT `/api/users/:id`** → Updates an existing user.
+- **DELETE `/api/users/:id`** → Deletes a user.
+
