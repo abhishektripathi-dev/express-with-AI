@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken");
-require("dotenv").config({ path: "../.env" });
+
+require("dotenv").config({path: require("path").join(__dirname, "..", ".env")});
 
 const authMiddleware = (req, res, next) => {
   const token = req.header("Authorization");
-  
+
   if (!token) return res.status(401).json({ message: "Access denied. No token provided." });
 
   try {
