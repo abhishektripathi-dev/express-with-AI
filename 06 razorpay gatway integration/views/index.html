@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment Integration</title>
+</head>
+
+<body>
+  <button id="pay-btn">Pay Now</button>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const BASE_URL = "http://localhost:5000/api/payment";
+
+    document.getElementById("pay-btn").addEventListener("click", async () => {
+      try {
+        // Create order on the server
+        const response = await axios.post(`${BASE_URL}/create-order`, {
+          amount: 399, 
+          currency: "INR",
+          receipt: "receipt#1"
+        });
+
+        // const order = response.data; // Correct way to access axios response
+
+        const options = {
+          key: response.data.key_id, // Replace with your Razorpay Key ID
+          amount: response.data.order.amount,
+          currency: response.data.order.currency,
+          order_id: response.data.order.id,
+        //   name: "Your Company Name",
+        //   description: "Test Transaction",
+          handler: async function (response) {
+            try {
+              // Verify payment on the server
+              const verifyRes = await axios.post(`${BASE_URL}/verify-payment`, response);
+              if (verifyRes.data.success) {
+                alert("Payment Successful!");
+              } else {
+                alert("Payment Verification Failed");
+              }
+            } catch (error) {
+              console.error("Verification error:", error);
+              alert("Error in payment verification.");
+            }
+          },
+          prefill: {
+            name: "Abhishek Tripathi", // Prefilled details (optional)
+            email: "abhishektripathi3196@gmail.com",
+            contact: "8182050098"
+          },
+          theme: {
+            color: "#3399cc"
+          }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (error) {
+        console.error("Payment error:", error);
+        alert("Something went wrong while initiating the payment.");
+      }
+    });
+  </script>
+
+</body>
+
+</html>
